@@ -5,16 +5,29 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     public node rightNow = null;
-    public string arah = "bottom";
-    bool selectDirection = false;
+    public static int arah = 0;
+    public static int sisaDadu = 0;
+    public static bool pilihArrow = false;
+    
+    public static bool selectDirection = false;
+    public static bool puterdadu = false;
+    public static int jalan = 0;
 
     void Start () {
-        StartCoroutine(Move(3));
+        puterdadu = false;
 	}
 
     private void Update()
     {
-        
+        Debug.Log(jalan);
+        if (puterdadu == true)
+        {
+            StartCoroutine(Move(jalan));
+        }
+        if (pilihArrow == true)
+        {
+            StartCoroutine(Move(sisaDadu));
+        }
     }
 
     void Gerak(node next)
@@ -22,21 +35,28 @@ public class PlayerController : MonoBehaviour {
         transform.position = next.transform.position;
     }
 
-    void WaitUntilChooseDirection()
+    bool WaitUntilChooseDirection()
     {
         Debug.Log("waitiinggg");
         selectDirection = true;
+        return true;
     }
 
     IEnumerator Move(int jmlDadu)
     {
-        for (int i = 0; i < jmlDadu; i++)
+        puterdadu = false;
+        pilihArrow = false;
+        bool sisa = false;
+        for (int i = jmlDadu; i > 0; i--)
         {
+            sisaDadu = i;
+            //Debug.Log("BERAPA JALANNYA : " + jalan);
+            Debug.Log("SISA JALANNYA : " + sisaDadu);
             if (!selectDirection)
             {
                 switch (arah)
                 {
-                    case "bottom":
+                    case 0:
                         if (rightNow.bottom != null)
                         {
                             Gerak(rightNow.bottom);
@@ -44,10 +64,10 @@ public class PlayerController : MonoBehaviour {
                         }
                         else
                         {
-                            WaitUntilChooseDirection();
+                            sisa = WaitUntilChooseDirection();
                         }
                         break;
-                    case "top":
+                    case 3:
                         if (rightNow.top != null)
                         {
                             Gerak(rightNow.top);
@@ -55,10 +75,10 @@ public class PlayerController : MonoBehaviour {
                         }
                         else
                         {
-                            WaitUntilChooseDirection();
+                            sisa = WaitUntilChooseDirection();
                         }
                         break;
-                    case "right":
+                    case 2:
                         if (rightNow.right != null)
                         {
                             Gerak(rightNow.right);
@@ -66,10 +86,10 @@ public class PlayerController : MonoBehaviour {
                         }
                         else
                         {
-                            WaitUntilChooseDirection();
+                            sisa = WaitUntilChooseDirection();
                         }
                         break;
-                    case "left":
+                    case 1:
                         if (rightNow.left != null)
                         {
                             Gerak(rightNow.left);
@@ -77,9 +97,13 @@ public class PlayerController : MonoBehaviour {
                         }
                         else
                         {
-                            WaitUntilChooseDirection();
+                            sisa = WaitUntilChooseDirection();
                         }
                         break;
+                }
+                if (sisa)
+                {
+                    break;
                 }
             }
             else
@@ -88,5 +112,6 @@ public class PlayerController : MonoBehaviour {
             }
             yield return new WaitForSeconds(.75f);
         }
+
     }
 }

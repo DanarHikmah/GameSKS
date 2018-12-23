@@ -28,12 +28,16 @@ public class Dice : MonoBehaviour {
         int randomDiceSide = 0;
         for (int i = 0; i <= 20; i++)
         {
-            randomDiceSide = Random.Range(0, 6);
+            randomDiceSide = Random.Range(0, 5);
             rend.sprite = diceSides[randomDiceSide];
             yield return new WaitForSeconds(0.05f);
         }
+        PlayerController.jalan = randomDiceSide + 1;
+        PlayerController.puterdadu = true;
 
-        /*GameControl.diceSideThrown = randomDiceSide + 1;
+        
+        /*
+        GameControl.diceSideThrown = randomDiceSide + 1;
         if (whosTurn == 1)
         {
             GameControl.MovePlayer(1);
